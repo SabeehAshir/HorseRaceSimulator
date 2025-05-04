@@ -64,17 +64,18 @@ public class Race
         long startTime = System.currentTimeMillis();
         // Reset all horses to start
         for (Horse horse : horses.values()) {
-
-            horse.goBackToStart();
+            if (horse != null) { // Skip null horses
+                horse.goBackToStart();
+            }
         }
     
         // Race loop
         while (true) {
             // Move each horse
             for (Horse horse : horses.values()) {
-                
-                moveHorseIfNotFallen(horse);
-                
+                if (horse != null) { // Skip null horses
+                    moveHorseIfNotFallen(horse);
+                }
             }
     
             // Update GUI
@@ -84,20 +85,19 @@ public class Race
     
             // Check for winner
             for (Horse horse : horses.values()) {
-                if ( hasWonRace(horse)) {
+                if (horse != null && hasWonRace(horse)) { // Skip null horses
                     System.out.println("Horse " + horse.getName() + " has won the Race!");
                     adjustConfidenceForWinner(horse);
                     long endTime = System.currentTimeMillis(); // Record the end time
                     displayStatistics(horse, startTime, endTime); // Call displayStatistics
                     return;
                 }
-                
             }
     
             // Check if all horses fell
             boolean allFallen = true;
             for (Horse horse : horses.values()) {
-                if (horse != null && !horse.hasFallen()) {
+                if (horse != null && !horse.hasFallen()) { // Skip null horses
                     allFallen = false;
                     break;
                 }
@@ -116,7 +116,6 @@ public class Race
         }
     }
     
-    
     /**
      * Randomly make a horse move forward or fall depending
      * on its confidence rating
@@ -124,19 +123,21 @@ public class Race
      * 
      * @param theHorse the horse to be moved
      */
-    private void moveHorseIfNotFallen(Horse theHorse)
-    {
-        if (theHorse.hasFallen()){
-             return;
+    private void moveHorseIfNotFallen(Horse theHorse) {
+        if (theHorse == null) { // Skip null horses
+            return;
         }
-        
+    
+        if (theHorse.hasFallen()) {
+            return;
+        }
+    
         if (Math.random() < (theHorse.getConfidence() * theHorse.getConfidence())) {
             theHorse.fall();
             return;
         }
-        
-            theHorse.moveForward();
-        
+    
+        theHorse.moveForward();
     }
         
     /** 
@@ -145,8 +146,10 @@ public class Race
      * @param theHorse The horse we are testing
      * @return true if the horse has won, false otherwise.
      */
-    private boolean hasWonRace(Horse theHorse)
-    {
+    private boolean hasWonRace(Horse theHorse) {
+        if (theHorse == null) { // Skip null horses
+            return false;
+        }
         return theHorse.getDistanceTravelled() >= raceLength;
     }
 
