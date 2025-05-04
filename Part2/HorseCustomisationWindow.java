@@ -1,15 +1,15 @@
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
+import java.util.Map;
 
 public class HorseCustomisationWindow extends JFrame {
-    private final List<Horse> horses;
+    private final Map<Integer,Horse> horses;
     private final DefaultListModel<String> horseListModel;
     private JList<String> horseList;
     private JTextField confidenceField;
     private JLabel imagePreview;
 
-    public HorseCustomisationWindow(List<Horse> horses) {
+    public HorseCustomisationWindow(Map<Integer,Horse> horses) {
         this.horses = horses;
 
         setTitle("Horse Customisation");
@@ -20,7 +20,7 @@ public class HorseCustomisationWindow extends JFrame {
 
         // Horse list panel
         horseListModel = new DefaultListModel<>();
-        for (Horse horse : horses) {
+        for (Horse horse : horses.values()) {
             horseListModel.addElement(horse.getName());
         }
         horseList = new JList<>(horseListModel);
