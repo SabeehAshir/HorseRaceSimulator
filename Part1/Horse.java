@@ -1,10 +1,10 @@
-import javax.swing.ImageIcon;
+
 
 /**
  * Write a description of class Horse here.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Sabeeh Ashir
+ * @version 1.0
  */
 public class Horse
 {
@@ -13,11 +13,7 @@ public class Horse
     private int distanceTravelled;
     private boolean hasFallen;
     private double confidence;
-    
 
-    
-    
-      
     //Constructor of class Horse
     /**
      * Constructor for objects of class Horse
@@ -82,6 +78,9 @@ public class Horse
 
     public void setConfidence(double newConfidence)
     {
+        if (newConfidence <0.0 || newConfidence > 1.0) {
+            throw new IllegalArgumentException("Confidence must be between 0.0 and 1.0");
+        }
         this.confidence = newConfidence;
     }
     
