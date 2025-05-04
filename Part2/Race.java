@@ -1,10 +1,7 @@
 
 import java.lang.Math;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
 import javax.swing.JOptionPane;
 /**
  * A three-horse race, each horse running in its own lane
@@ -163,5 +160,24 @@ public class Race
     String message = "Winner: " + (winner != null ? winner.getName() : "No winner") +
                      "\nTime Taken: " + (endTime - startTime) / 1000.0 + " seconds";
     JOptionPane.showMessageDialog(null, message, "Race Statistics", JOptionPane.INFORMATION_MESSAGE);
-}
+    }
+    public void setLaneCount(int laneCount) {
+        if (laneCount < 1) {
+            throw new IllegalArgumentException("Lane count must be at least 1.");
+        }
+    
+        // Add new lanes if needed
+        for (int i = 1; i <= laneCount; i++) {
+            if (!horses.containsKey(i)) {
+                horses.put(i, null); // Add empty lanes
+            }
+        }
+    
+        // Remove extra lanes if needed
+        for (int i = laneCount + 1; i <= numberOfLanes; i++) {
+            horses.remove(i); // Remove lanes beyond the new count
+        }
+    
+        numberOfLanes = laneCount;
+    }
 }

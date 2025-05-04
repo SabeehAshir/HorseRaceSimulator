@@ -33,6 +33,18 @@ public class HorseRacingApp extends JFrame {
         JButton customiseButton = new JButton("Customise Horses");
         customiseButton.addActionListener(e -> openCustomisationWindow());
         controlPanel.add(customiseButton);
+        
+        JSlider laneCountSlider = new JSlider(1, 10, 3); // Min 1 lane, max 10 lanes, default 3
+        laneCountSlider.setMajorTickSpacing(1);
+        laneCountSlider.setPaintTicks(true);
+        laneCountSlider.setPaintLabels(true);
+        laneCountSlider.addChangeListener(e -> {
+            int laneCount = laneCountSlider.getValue();
+            race.setLaneCount(laneCount);
+            raceTrackPanel.repaint(); // Update the GUI
+        });
+        controlPanel.add(new JLabel("Lane Count:"));
+        controlPanel.add(laneCountSlider);
 
         add(controlPanel, BorderLayout.SOUTH);
 
