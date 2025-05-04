@@ -1,19 +1,18 @@
-import java.util.concurrent.TimeUnit;
 import java.lang.Math;
-
+import java.util.ArrayList;
+import java.util.List;
 /**
  * A three-horse race, each horse running in its own lane
  * for a given distance
  * 
- * @author McRaceface
+ * @author Sabeeh Ashir
  * @version 1.0
  */
 public class Race
 {
-    private int raceLength;
-    private Horse lane1Horse;
-    private Horse lane2Horse;
-    private Horse lane3Horse;
+    private final int raceLength;
+    private final List<Horse> horses;
+    private static final double BASE_FALL_PROBABILITY = 0.1;
 
     /**
      * Constructor for objects of class Race
@@ -23,11 +22,9 @@ public class Race
      */
     public Race(int distance)
     {
-        // initialise instance variables
+        if (distance <= 0) throw new IllegalArgumentException("Race length must be positive.");
         raceLength = distance;
-        lane1Horse = null;
-        lane2Horse = null;
-        lane3Horse = null;
+        horses = new ArrayList<>();
     }
     
     /**
@@ -38,21 +35,13 @@ public class Race
      */
     public void addHorse(Horse theHorse, int laneNumber)
     {
-        if (laneNumber == 1)
-        {
-            lane1Horse = theHorse;
+        while (horses.size() < laneNumber) {
+            horses.add(null); // Fill empty lanes with null
         }
-        else if (laneNumber == 2)
-        {
-            lane2Horse = theHorse;
-        }
-        else if (laneNumber == 3)
-        {
-            lane3Horse = theHorse;
-        }
-        else
-        {
-            System.out.println("Cannot add horse to lane " + laneNumber + " because there is no such lane");
+        if (laneNumber >= 1) {
+            horses.set(laneNumber - 1, theHorse);
+        } else {
+            System.out.println("Invalid lane number: " + laneNumber);
         }
     }
     
@@ -62,38 +51,55 @@ public class Race
      * then repeatedly moved forward until the 
      * race is finished
      */
-    public void startRace()
-    {
-        //declare a local variable to tell us when the race is finished
-        boolean finished = false;
-        
-        //reset all the lanes (all horses not fallen and back to 0). 
-        lane1Horse.goBackToStart();
-        lane2Horse.goBackToStart();
-        lane3Horse.goBackToStart();
-                      
-        while (!finished)
-        {
-            //move each horse
-            moveHorse(lane1Horse);
-            moveHorse(lane2Horse);
-            moveHorse(lane3Horse);
-                        
-            //print the race positions
-            printRace();
-            
-            //if any of the three horses has won the race is finished
-            if ( raceWonBy(lane1Horse) || raceWonBy(lane2Horse) || raceWonBy(lane3Horse) )
-            {
-                finished = true;
+    public void startRace() {
+        // Reset all horses to start
+        for (Horse horse : horses) {
+            if (horse != null) {
+                horse.goBackToStart();
             }
-           
-            //wait for 100 milliseconds
-            try{ 
-                TimeUnit.MILLISECONDS.sleep(100);
-            }catch(Exception e){}
+        }
+    
+        // Race loop
+        while (true) {
+            // Move each horse
+            for (Horse horse : horses) {
+                if (horse != null && !horse.hasFallen()) {
+                    moveHorse(horse);
+                }
+            }
+    
+            printRace();
+    
+            // Check for winner
+            for (Horse horse : horses) {
+                if (horse != null && raceWonBy(horse)) {
+                    announceWinner();
+                    adjustConfidence();
+                    return;
+                }
+            }
+    
+            // Check if all horses fell
+            boolean allFallen = true;
+            for (Horse horse : horses) {
+                if (horse != null && !horse.hasFallen()) {
+                    allFallen = false;
+                    break;
+                }
+            }
+            if (allFallen) {
+                System.out.println("All horses have fallen!");
+                announceWinner();
+                return;
+            }
+    
+            // Short pause
+            try {
+                Thread.sleep(100);
+            } catch (Exception e) {}
         }
     }
+    
     
     /**
      * Randomly make a horse move forward or fall depending
@@ -104,23 +110,16 @@ public class Race
      */
     private void moveHorse(Horse theHorse)
     {
-        //if the horse has fallen it cannot move, 
-        //so only run if it has not fallen
-        if  (!theHorse.hasFallen())
-        {
-            //the probability that the horse will move forward depends on the confidence;
-            if (Math.random() < theHorse.getConfidence())
-            {
-               theHorse.moveForward();
-            }
-            
-            //the probability that the horse will fall is very small (max is 0.1)
-            //but will also will depends exponentially on confidence 
-            //so if you double the confidence, the probability that it will fall is *2
-            if (Math.random() < (0.1*theHorse.getConfidence()*theHorse.getConfidence()))
-            {
-                theHorse.fall();
-            }
+        if (theHorse == null || theHorse.hasFallen()){
+             return;
+        }
+
+        if (Math.random() < theHorse.getConfidence()) {
+            theHorse.moveForward();
+        }
+
+        if (Math.random() < (BASE_FALL_PROBABILITY * theHorse.getConfidence() * theHorse.getConfidence())) {
+            theHorse.fall();
         }
     }
         
@@ -132,90 +131,98 @@ public class Race
      */
     private boolean raceWonBy(Horse theHorse)
     {
-        if (theHorse.getDistanceTravelled() == raceLength)
-        {
-            return true;
+        return theHorse != null && theHorse.getDistanceTravelled() >= raceLength;
+    }
+
+    public void announceWinner() 
+    {
+        Horse winner = null;
+        
+        for (Horse theHorse : horses) {
+            if (theHorse != null && raceWonBy(theHorse)) {
+                winner = theHorse;
+                break;
+            }
         }
-        else
-        {
-            return false;
+    
+        if (winner != null) {
+            System.out.println(winner.getName() + " wins the race!");
+        } else {
+            System.out.println("No winner :(");
+        }
+    }
+
+    
+    private void adjustConfidence() 
+    {
+        Horse winner = null;
+        for (Horse theHorse : horses) {
+            if (theHorse != null && raceWonBy(theHorse)) {
+                winner = theHorse;
+                break;
+            }
+        }
+        
+        for (Horse theHorse : horses) {
+            if (theHorse == null) continue;
+            if (theHorse == winner) {
+                theHorse.setConfidence(Math.min(1.0, theHorse.getConfidence() + 0.1));
+            } else if (theHorse.hasFallen()) {
+                theHorse.setConfidence(Math.max(0.0, theHorse.getConfidence() - 0.05));
+            }
         }
     }
     
     /***
      * Print the race on the terminal
      */
-    private void printRace()
-    {
-        System.out.print('\u000C');  //clear the terminal window
-        
-        multiplePrint('=',raceLength+3); //top edge of track
+    private void printRace() {
+        System.out.print("\033[H\033[2J"); // Clear terminal 
+        System.out.flush();
+
+        multiplePrint('=', raceLength + 3);
         System.out.println();
-        
-        printLane(lane1Horse);
+
+        horses.forEach(theHorse -> {
+            printLane(theHorse);
+            System.out.println();
+        });
+
+        multiplePrint('=', raceLength + 3);
         System.out.println();
-        
-        printLane(lane2Horse);
-        System.out.println();
-        
-        printLane(lane3Horse);
-        System.out.println();
-        
-        multiplePrint('=',raceLength+3); //bottom edge of track
-        System.out.println();    
     }
-    
-    /**
-     * print a horse's lane during the race
-     * for example
-     * |           X                      |
-     * to show how far the horse has run
-     */
-    private void printLane(Horse theHorse)
-    {
-        //calculate how many spaces are needed before
-        //and after the horse
-        int spacesBefore = theHorse.getDistanceTravelled();
-        int spacesAfter = raceLength - theHorse.getDistanceTravelled();
-        
-        //print a | for the beginning of the lane
+
+    private void printLane(Horse theHorse) {
         System.out.print('|');
-        
-        //print the spaces before the horse
-        multiplePrint(' ',spacesBefore);
-        
-        //if the horse has fallen then print dead
-        //else print the horse's symbol
-        if(theHorse.hasFallen())
-        {
-            System.out.print('\u2322');
-        }
-        else
-        {
+        int spacesBefore = (theHorse != null) ? theHorse.getDistanceTravelled() : 0;
+        multiplePrint(' ', spacesBefore);
+
+        if (theHorse == null) {
+            System.out.print(' ');
+        } else if (theHorse.hasFallen()) {
+            System.out.print('X');
+        } else {
             System.out.print(theHorse.getSymbol());
         }
-        
-        //print the spaces after the horse
-        multiplePrint(' ',spacesAfter);
-        
-        //print the | for the end of the track
+
+        int spacesAfter = raceLength - spacesBefore;
+        multiplePrint(' ', spacesAfter);
         System.out.print('|');
+
+        if (theHorse != null) {
+            String status = theHorse.hasFallen() ? " (Fallen)" : "";
+            System.out.printf("  %s (%.2f)%s", 
+                             theHorse.getName(), 
+                             theHorse.getConfidence(), 
+                             status);
+        } else {
+            System.out.print("  Empty lane");
+        }
     }
-        
-    
-    /***
-     * print a character a given number of times.
-     * e.g. printmany('x',5) will print: xxxxx
-     * 
-     * @param aChar the character to Print
-     */
-    private void multiplePrint(char aChar, int times)
-    {
-        int i = 0;
-        while (i < times)
-        {
-            System.out.print(aChar);
-            i = i + 1;
+
+    private void multiplePrint(char c, int times) {
+        for (int i = 0; i < times; i++) {
+            System.out.print(c);
         }
     }
 }
