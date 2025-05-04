@@ -21,7 +21,7 @@ public class Horse {
     }
 
     public void moveForward() {
-        distanceTravelled += (int) (Math.random() * 2 + 0.5); // Random movement
+        distanceTravelled += (int) (Math.random() * 3 + 1); // Random movement
     }
 
     public void fall() {
