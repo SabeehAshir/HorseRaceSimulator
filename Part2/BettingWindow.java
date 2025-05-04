@@ -1,14 +1,16 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 public class BettingWindow extends JFrame {
     private final PlayerAccount playerAccount;
-    private final List<Horse> horses;
+    private final Map<Integer,Horse> horses;
     private JComboBox<String> horseSelector;
     private JTextField betAmountField;
 
-    public BettingWindow(PlayerAccount playerAccount, List<Horse> horses) {
+    public BettingWindow(PlayerAccount playerAccount, Map<Integer,Horse> horses) {
         this.playerAccount = playerAccount;
         this.horses = horses;
 
@@ -25,7 +27,7 @@ public class BettingWindow extends JFrame {
         // Horse selector
         bettingPanel.add(new JLabel("Select Horse:"));
         horseSelector = new JComboBox<>();
-        for (Horse horse : horses) {
+        for (Horse horse : horses.values()) {
             horseSelector.addItem(horse.getName());
         }
         bettingPanel.add(horseSelector);
