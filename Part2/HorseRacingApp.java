@@ -33,7 +33,7 @@ public class HorseRacingApp extends JFrame {
         JButton customiseButton = new JButton("Customise Horses");
         customiseButton.addActionListener(e -> openCustomisationWindow());
         controlPanel.add(customiseButton);
-        
+
         JSlider laneCountSlider = new JSlider(1, 10, 3); // Min 1 lane, max 10 lanes, default 3
         laneCountSlider.setMajorTickSpacing(1);
         laneCountSlider.setPaintTicks(true);
@@ -45,8 +45,15 @@ public class HorseRacingApp extends JFrame {
         });
         controlPanel.add(new JLabel("Lane Count:"));
         controlPanel.add(laneCountSlider);
-
         add(controlPanel, BorderLayout.SOUTH);
+
+        JComboBox<String> shapeSelector = new JComboBox<>(new String[] { "oval", "figure-eight", "zigzag" });
+        shapeSelector.addActionListener(e -> {
+        String selectedShape = (String) shapeSelector.getSelectedItem();
+        race.setTrackShape(selectedShape);
+        });
+        controlPanel.add(new JLabel("Track Shape:"));
+        controlPanel.add(shapeSelector);
 
         
 

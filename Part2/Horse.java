@@ -21,7 +21,7 @@ public class Horse {
     }
 
     public void moveForward() {
-        distanceTravelled += (int) (Math.random() * this.confidence + 1); // Random movement
+        distanceTravelled += (int) (Math.random() * 3 * confidence + 1); // Random value between 1 and 3, scaled by confidence
     }
 
     public void fall() {
@@ -71,5 +71,7 @@ public class Horse {
     public void setImage(ImageIcon image) {
         this.image = image;
     }
-    
+    public void setDistanceTravelled(int distance) {
+        this.distanceTravelled = distance;
+    }
 }

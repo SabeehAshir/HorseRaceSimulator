@@ -15,6 +15,7 @@ public class Race
     private final int raceLength;
     private final Map<Integer,Horse> horses;
     private int numberOfLanes= 0;
+    private String trackShape = "oval"; // Default track shape
 
     /**
      * Constructor for objects of class Race
@@ -124,20 +125,33 @@ public class Race
      * @param theHorse the horse to be moved
      */
     private void moveHorseIfNotFallen(Horse theHorse) {
-        if (theHorse == null) { // Skip null horses
+        if (theHorse == null || theHorse.hasFallen()) {
             return;
         }
     
-        if (theHorse.hasFallen()) {
-            return;
-        }
-    
-        if (Math.random() < (theHorse.getConfidence() * theHorse.getConfidence())) {
+        // Chance of falling based on confidence
+        if (Math.random() < (0.1 * (1 - theHorse.getConfidence()))) { // Higher chance of falling for lower confidence
             theHorse.fall();
             return;
         }
     
-        theHorse.moveForward();
+        switch (trackShape) {
+            case "oval":
+                theHorse.moveForward(); // Normal movement
+                break;
+            case "figure-eight":
+                theHorse.moveForward();
+                if (theHorse.getDistanceTravelled() % 50 == 0) { // Slow down at intersections
+                    theHorse.setDistanceTravelled(Math.max(0, theHorse.getDistanceTravelled() - 1)); // Ensure distance doesn't go below 0
+                }
+                break;
+            case "zigzag":
+                theHorse.moveForward();
+                if (theHorse.getDistanceTravelled() % 30 == 0) { // Adjust speed at sharp turns
+                    theHorse.setDistanceTravelled(Math.max(0, theHorse.getDistanceTravelled() - 2)); // Ensure distance doesn't go below 0
+                }
+                break;
+        }
     }
         
     /** 
@@ -183,4 +197,11 @@ public class Race
     
         numberOfLanes = laneCount;
     }
+    public void setTrackShape(String shape) {
+        if (!shape.equals("oval") && !shape.equals("figure-eight") && !shape.equals("zigzag")) {
+            throw new IllegalArgumentException("Invalid track shape: " + shape);
+        }
+        this.trackShape = shape;
+    }
+    
 }
