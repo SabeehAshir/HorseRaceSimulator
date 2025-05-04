@@ -55,6 +55,14 @@ public class HorseRacingApp extends JFrame {
         controlPanel.add(new JLabel("Track Shape:"));
         controlPanel.add(shapeSelector);
 
+        JComboBox<String> weatherSelector = new JComboBox<>(new String[] { "dry", "muddy", "icy" });
+        weatherSelector.addActionListener(e -> {
+        String selectedWeather = (String) weatherSelector.getSelectedItem();
+        race.setWeatherCondition(selectedWeather);
+        });
+        controlPanel.add(new JLabel("Weather:"));
+        controlPanel.add(weatherSelector);
+
         
 
         pack();

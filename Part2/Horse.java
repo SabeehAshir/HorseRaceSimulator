@@ -20,8 +20,8 @@ public class Horse {
         this.image = null; // Default to no image
     }
 
-    public void moveForward() {
-        distanceTravelled += (int) (Math.random() * 3 * confidence + 1); // Random value between 1 and 3, scaled by confidence
+    public void moveForward(double speedModifier) {
+        distanceTravelled += (int) (Math.random() * 3 * confidence * speedModifier + 1); // Random value between 1 and 3, scaled by confidence
     }
 
     public void fall() {
