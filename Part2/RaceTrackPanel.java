@@ -1,14 +1,14 @@
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
+import java.util.Map;
 
 public class RaceTrackPanel extends JPanel {
     private final int raceLength;
-    private final List<Horse> horses;
+    private final Map<Integer,Horse> horses;
     private final Image horseImage;
     private final Image fallenHorseImage;
 
-    public RaceTrackPanel(int raceLength, List<Horse> horses) {
+    public RaceTrackPanel(int raceLength, Map<Integer,Horse> horses) {
         this.raceLength = raceLength;
         this.horses = horses;
 
