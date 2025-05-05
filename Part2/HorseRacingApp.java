@@ -2,13 +2,20 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Map;
 import java.util.HashMap;
-
+/**
+ * Horse Racing Simulation Application where the game is played
+ *
+ * 
+ * @author Sabeeh Ashir
+ * @version 1.0
+ */
 
 public class HorseRacingApp extends JFrame {
     private int trackLength = 15; // Default track length
     private Race race;
     private RaceTrackPanel raceTrackPanel;
     private HorseStatistics horseStatistics;
+    private Map<String, HorseStatistics> statisticsMap = new HashMap<>();
 
     public HorseRacingApp() {
         setTitle("Horse Racing Simulation");
@@ -109,8 +116,8 @@ public class HorseRacingApp extends JFrame {
         bettingWindow.setVisible(true);
     }
     private void initializeHorses() {
-        race.addHorse(new Horse('A', "Lightning", 0.7), 1);
-        race.addHorse(new Horse('B', "Thunder", 0.6), 2);
+        race.addHorse(new Horse('A', "Lightning", 0.3), 1);
+        race.addHorse(new Horse('B', "Thunder", 0.4), 2);
         race.addHorse(new Horse('C', "Storm", 0.5), 3);
         for (Horse horse : race.getHorses().values()) {
             horse.setImage(new ImageIcon("Horseimg.png")); // Default image
@@ -118,7 +125,12 @@ public class HorseRacingApp extends JFrame {
     }
 
     private void startRace() {
-        new Thread(() -> race.startRace(() -> raceTrackPanel.updateRace())).start();
+        new Thread(() -> {
+            race.startRace(() -> {
+                raceTrackPanel.updateRace(); 
+                race.endRace(statisticsMap); 
+            });
+        }).start();
     }
 
     public static void main(String[] args) {

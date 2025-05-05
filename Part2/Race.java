@@ -4,8 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
 /**
- * A three-horse race, each horse running in its own lane
- * for a given distance
+ * Race class for a horse racing game, with gui functionality 
  * 
  * @author Sabeeh Ashir
  * @version 1.0
@@ -120,8 +119,8 @@ public class Race
     }
     
     /**
-     * Randomly make a horse move forward or fall depending
-     * on its confidence rating
+     * 
+     * 
      * A fallen horse cannot move
      * 
      * @param theHorse the horse to be moved
@@ -214,7 +213,7 @@ public class Race
     
         // Remove extra lanes if needed
         for (int i = laneCount + 1; i <= numberOfLanes; i++) {
-            horses.remove(i); // Remove lanes beyond the new count
+            horses.remove(i);
         }
     
         numberOfLanes = laneCount;
@@ -241,10 +240,9 @@ public class Race
         }
         this.weatherCondition = condition;
     }
-    public void endRace(long startTime, long endTime) {
-        double raceTime = (endTime - startTime) / 1000.0; // Calculate race time in seconds
+    public void endRace(Map<String, HorseStatistics> statisticsMap) {
         for (Horse horse : horses.values()) {
-            double speed = horse.getDistanceTravelled() /raceTime; // Example calculation
+            double speed = horse.getDistanceTravelled() / raceLength; 
             boolean won = horse.getPosition() == 1; // Check if the horse won
             String trackCondition = this.weatherCondition; // Current track condition
     
@@ -254,7 +252,7 @@ public class Race
                 stats = new HorseStatistics(horse.getName());
                 statisticsMap.put(horse.getName(), stats);
             }
-            stats.addRace(speed, raceTime, won, trackCondition);
+            stats.addRace(speed, raceLength, won, trackCondition);
         }
     }
     

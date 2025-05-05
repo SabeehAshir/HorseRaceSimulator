@@ -1,7 +1,13 @@
 import javax.swing.*;
 import java.awt.*;
-
 import java.util.Map;
+/**
+ * Horse Customization dialog for customizing horse attributes
+ *
+ * 
+ * @author Sabeeh Ashir
+ * @version 1.0
+ */
 
 public class HorseCustomization extends JDialog {
     private String[] horseImages = {

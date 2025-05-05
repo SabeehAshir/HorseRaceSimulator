@@ -1,5 +1,12 @@
 import javax.swing.ImageIcon;
 
+/**
+ * Horse class with Gui features
+ *
+ * 
+ * @author Sabeeh Ashir
+ * @version 1.0
+ */
 public class Horse {
     private String name;
     private char symbol;
