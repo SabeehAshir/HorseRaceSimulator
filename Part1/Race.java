@@ -2,8 +2,8 @@ import java.lang.Math;
 import java.util.ArrayList;
 import java.util.List;
 /**
- * A three-horse race, each horse running in its own lane
- * for a given distance
+ * three horses with dynamic lane number in a racing game
+ *
  * 
  * @author Sabeeh Ashir
  * @version 1.0
@@ -115,7 +115,7 @@ public class Race
         }
 
         if (Math.random() < theHorse.getConfidence()) {
-            theHorse.moveForward();
+            //theHorse.moveForward();
         }
 
         if (Math.random() < (BASE_FALL_PROBABILITY * theHorse.getConfidence() * theHorse.getConfidence())) {
