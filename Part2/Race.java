@@ -131,8 +131,10 @@ public class Race
             return;
         }
     
-        // Chance of falling based on confidence
-        if (Math.random() < (0.1 * (1 - theHorse.getConfidence()))) { // Higher chance of falling for lower confidence
+        double baseFallProbability = 0.05; // Minimum chance of falling (5%)
+        double fallProbability = baseFallProbability + (0.1 * (1 - theHorse.getConfidence())); // Add confidence-based probability
+    
+        if (Math.random() < fallProbability) {
             theHorse.fall();
             return;
         }
