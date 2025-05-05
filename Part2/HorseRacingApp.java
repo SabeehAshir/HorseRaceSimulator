@@ -18,7 +18,8 @@ public class HorseRacingApp extends JFrame {
         initializeHorses();
 
         // Create race track panel
-        
+        raceTrackPanel = new RaceTrackPanel(race);
+        add(raceTrackPanel, BorderLayout.CENTER);
 
         // Create control panel
         JPanel controlPanel = new JPanel();
@@ -32,7 +33,8 @@ public class HorseRacingApp extends JFrame {
 
         JButton customiseButton = new JButton("Customise Horses");
         customiseButton.addActionListener(e -> {
-        new HorseCustomization(this, race.getHorses()).setVisible(true); // Pass the entire map of horses
+        ensureAllLanesHaveHorses(race.getLaneCount()); // Ensure all lanes have horses
+        new HorseCustomization(this, race.getHorses(),raceTrackPanel).setVisible(true); // Pass the entire map of horses
         });
         controlPanel.add(customiseButton);
 
@@ -85,8 +87,7 @@ public class HorseRacingApp extends JFrame {
         controlPanel.add(new JLabel("Weather:"));
         controlPanel.add(weatherSelector);
 
-        raceTrackPanel = new RaceTrackPanel(race);
-        add(raceTrackPanel, BorderLayout.CENTER);
+       
 
         
 
@@ -111,5 +112,12 @@ public class HorseRacingApp extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(HorseRacingApp::new);
+    }
+    private void ensureAllLanesHaveHorses(int laneCount) {
+        for (int i = 1; i <= laneCount; i++) {
+            if (!race.getHorses().containsKey(i)) {
+                race.addHorse(new Horse((char) ('A' + i - 1), "Horse " + i, 0.5), i); // Add a default horse
+            }
+        }
     }
 }

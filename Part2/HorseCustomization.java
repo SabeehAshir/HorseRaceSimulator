@@ -1,21 +1,24 @@
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+
 import java.util.Map;
 
 public class HorseCustomization extends JDialog {
+    private String[] horseImages = {
+            "Horseimg.png", "BlackHorse.png", "BrownHorse.png",
+            "BlueHorse.png", "GreyHorse.png", "PurpleHorse.png",
+    };
     private Map<Integer, Horse> horses; // Map of horses to customize
     private JTabbedPane tabbedPane;
-    private List<String> imagePaths; // List of image paths
+    private RaceTrackPanel raceTrackPanel; // Reference to
+  
 
-    public HorseCustomization(JFrame parent, Map<Integer, Horse> horses) {
+    public HorseCustomization(JFrame parent, Map<Integer, Horse> horses, RaceTrackPanel raceTrackPanel) {
         super(parent, "Customize Horses", true);
         this.horses = horses;
+        this.raceTrackPanel = raceTrackPanel; 
 
-        // Load image paths
-        imagePaths = loadImagePaths();
+      
 
         setLayout(new BorderLayout());
         setSize(600, 600);
@@ -53,14 +56,6 @@ public class HorseCustomization extends JDialog {
         breedSelector.setSelectedItem(horse.getBreed());
         breedSelector.addActionListener(e -> horse.setBreed((String) breedSelector.getSelectedItem()));
         panel.add(breedSelector);
-
-        // Coat Color Selector
-        panel.add(new JLabel("Coat Color:"));
-        JComboBox<String> coatColorSelector = new JComboBox<>(new String[] { "Brown", "Black", "Grey", "White" });
-        coatColorSelector.setSelectedItem(horse.getCoatColor());
-        coatColorSelector.addActionListener(e -> horse.setCoatColor((String) coatColorSelector.getSelectedItem()));
-        panel.add(coatColorSelector);
-
         // Symbol Image Selector
         panel.add(new JLabel("Symbol Image:"));
         JPanel imageSelectionPanel = createImageSelectionPanel(horse);
@@ -85,36 +80,83 @@ public class HorseCustomization extends JDialog {
 
     private JPanel createImageSelectionPanel(Horse horse) {
         JPanel imagePanel = new JPanel();
-        imagePanel.setLayout(new GridLayout(0, 3, 10, 10)); // Display images in a grid
-
-        ButtonGroup buttonGroup = new ButtonGroup(); // Group buttons for exclusive selection
-        for (String imagePath : imagePaths) {
-            ImageIcon icon = new ImageIcon(imagePath);
-            Image scaledImage = icon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH); // Scale image
-            JRadioButton imageButton = new JRadioButton(new ImageIcon(scaledImage));
-            imageButton.addActionListener(e -> horse.setImage(new ImageIcon(imagePath))); // Set the selected image for the horse
-            buttonGroup.add(imageButton);
-            imagePanel.add(imageButton);
-        }
-
+        imagePanel.setLayout(new BorderLayout(10, 10)); // Use BorderLayout for navigation and image display
+    
+        // Track the current image index
+        final int[] currentIndex = {0};
+    
+        // Label to display the current image
+        JLabel imageLabel = new JLabel();
+        imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        imageLabel.setPreferredSize(new Dimension(200, 200)); // Increase size for better visibility
+        updateImageLabel(imageLabel, currentIndex[0]); // Display the first image
+    
+        // Navigation buttons
+        JButton prevButton = new JButton("Previous");
+        JButton nextButton = new JButton("Next");
+    
+        // Action for "Previous" button
+        prevButton.addActionListener(e -> {
+            if (currentIndex[0] > 0) {
+                currentIndex[0]--;
+                updateImageLabel(imageLabel, currentIndex[0]);
+            }
+        });
+    
+        // Action for "Next" button
+        nextButton.addActionListener(e -> {
+            if (currentIndex[0] < horseImages.length - 1) {
+                currentIndex[0]++;
+                updateImageLabel(imageLabel, currentIndex[0]);
+            }
+        });
+    
+        // Select button to set the current image as the horse's symbol
+        JButton selectButton = new JButton("Select");
+        selectButton.addActionListener(e -> {
+            horse.setImage(new ImageIcon(horseImages[currentIndex[0]])); // Set the selected image for the horse
+            JOptionPane.showMessageDialog(this, "Image selected: " + horseImages[currentIndex[0]]);
+        });
+    
+        // Add components to the panel
+        JPanel navigationPanel = new JPanel();
+        navigationPanel.setLayout(new FlowLayout());
+        navigationPanel.add(prevButton);
+        navigationPanel.add(nextButton);
+    
+        imagePanel.add(imageLabel, BorderLayout.CENTER);
+        imagePanel.add(navigationPanel, BorderLayout.SOUTH);
+        imagePanel.add(selectButton, BorderLayout.NORTH);
+    
         return imagePanel;
     }
-
-    private List<String> loadImagePaths() {
-        List<String> paths = new ArrayList<>();
-        File folder = new File("Part2"); // Path to the folder containing images
-        File[] files = folder.listFiles((dir, name) -> name.toLowerCase().endsWith(".png") || name.toLowerCase().endsWith(".jpg"));
-
-        if (files != null) {
-            for (File file : files) {
-                paths.add(file.getAbsolutePath());
-            }
-        }
-        return paths;
+    
+    private void updateImageLabel(JLabel imageLabel, int index) {
+        ImageIcon icon = new ImageIcon(horseImages[index]);
+        Image scaledImage = icon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH); // Scale image to 200x200
+        imageLabel.setIcon(new ImageIcon(scaledImage));
     }
+    
 
+   
     private void saveAllCustomizations() {
-        JOptionPane.showMessageDialog(this, "All customizations saved!", "Success", JOptionPane.INFORMATION_MESSAGE);
-        dispose();
+        try {
+            JOptionPane.showMessageDialog(this, "All customizations saved!", "Success", JOptionPane.INFORMATION_MESSAGE);
+    
+            // Refresh the race track panel to reflect updated horse images
+            SwingUtilities.invokeLater(() -> {
+                if (raceTrackPanel != null) {
+                    raceTrackPanel.repaint(); // Ensure raceTrackPanel is not null
+                } else {
+                    System.err.println("Error: raceTrackPanel is null.");
+                }
+            });
+    
+            dispose(); // Close the customization dialog
+        } catch (Exception ex) {
+            ex.printStackTrace(); // Print the stack trace for debugging
+            JOptionPane.showMessageDialog(this, "An error occurred while saving customizations: " + ex.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }
