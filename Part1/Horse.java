@@ -1,7 +1,8 @@
-package Part1;
+
 
 /**
- * Write a description of class Horse here.
+ * This class represents a horse in a horse racing game.
+>>>>>>> gui-development
  * 
  * @author Sabeeh Ashir
  * @version 1.0

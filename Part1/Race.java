@@ -2,8 +2,13 @@ import java.lang.Math;
 import java.util.ArrayList;
 import java.util.List;
 /**
+<<<<<<< HEAD
  * A three-horse race, each horse running in its own lane
  * for a given distance
+=======
+ * three horses with dynamic lane number in a racing game
+ *
+>>>>>>> gui-development
  * 
  * @author Sabeeh Ashir
  * @version 1.0
@@ -19,7 +24,11 @@ public class Race
      * Initially there are no horses in the lanes
      * 
      * @param distance the length of the racetrack (in metres/yards...)
+<<<<<<< HEAD
      */
+=======
+     */ 
+>>>>>>> gui-development
     public Race(int distance)
     {
         if (distance <= 0) throw new IllegalArgumentException("Race length must be positive.");
@@ -115,7 +124,11 @@ public class Race
         }
 
         if (Math.random() < theHorse.getConfidence()) {
+<<<<<<< HEAD
             theHorse.moveForward();
+=======
+            //theHorse.moveForward();
+>>>>>>> gui-development
         }
 
         if (Math.random() < (BASE_FALL_PROBABILITY * theHorse.getConfidence() * theHorse.getConfidence())) {
