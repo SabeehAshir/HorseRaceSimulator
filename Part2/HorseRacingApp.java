@@ -31,7 +31,9 @@ public class HorseRacingApp extends JFrame {
         controlPanel.add(bettingButton);
 
         JButton customiseButton = new JButton("Customise Horses");
-        customiseButton.addActionListener(e -> openCustomisationWindow());
+        customiseButton.addActionListener(e -> {
+        new HorseCustomization(this, race.getHorses()).setVisible(true); // Pass the entire map of horses
+        });
         controlPanel.add(customiseButton);
 
         JSlider laneCountSlider = new JSlider(3, 10, 3); // Min 3 lane, max 10 lanes, default 3
@@ -41,6 +43,14 @@ public class HorseRacingApp extends JFrame {
         laneCountSlider.addChangeListener(e -> {
             int laneCount = laneCountSlider.getValue();
             race.setLaneCount(laneCount);
+        
+            // Add placeholder horses for new lanes
+            for (int i = 1; i <= laneCount; i++) {
+                if (!race.getHorses().containsKey(i)) {
+                    race.addHorse(new Horse((char) ('A' + i - 1), "Horse " + i, 0.5), i); // Add a default horse
+                }
+            }
+        
             raceTrackPanel.repaint(); // Update the GUI
         });
         controlPanel.add(new JLabel("Lane Count:"));
@@ -89,11 +99,6 @@ public class HorseRacingApp extends JFrame {
         BettingWindow bettingWindow = new BettingWindow(playerAccount, race.getHorses());
         bettingWindow.setVisible(true);
     }
-    private void openCustomisationWindow() {
-        HorseCustomisationWindow customisationWindow = new HorseCustomisationWindow(race.getHorses());
-        customisationWindow.setVisible(true);
-    }
-
     private void initializeHorses() {
         race.addHorse(new Horse('A', "Lightning", 0.7), 1);
         race.addHorse(new Horse('B', "Thunder", 0.6), 2);

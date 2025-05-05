@@ -7,7 +7,10 @@ public class Horse {
     private boolean hasFallen;
     private double confidence;
     private ImageIcon image; // New field for the horse's image/icon
-
+    private String breed;
+    private String coatColor;
+    private String saddle;
+    private String horseshoes;
     public Horse(char symbol, String name, double confidence) {
         if (confidence < 0 || confidence > 1) {
             throw new IllegalArgumentException("Confidence must be between 0 and 1.");
@@ -73,5 +76,38 @@ public class Horse {
     }
     public void setDistanceTravelled(int distance) {
         this.distanceTravelled = distance;
+    }
+    public String getBreed() {
+        return breed;
+    }
+
+    public void setBreed(String breed) {
+        this.breed = breed;
+    }
+
+    public String getCoatColor() {
+        return coatColor;
+    }
+
+    public void setCoatColor(String coatColor) {
+        this.coatColor = coatColor;
+    }
+    public void setSymbol(char symbol) {
+        this.symbol = symbol;
+    }
+    public String getSaddle() {
+        return saddle;
+    }
+
+    public void setSaddle(String saddle) {
+        this.saddle = saddle;
+    }
+
+    public String getHorseshoes() {
+        return horseshoes;
+    }
+
+    public void setHorseshoes(String horseshoes) {
+        this.horseshoes = horseshoes;
     }
 }
