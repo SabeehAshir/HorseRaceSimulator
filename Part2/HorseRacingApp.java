@@ -20,6 +20,7 @@ public class HorseRacingApp extends JFrame {
         // Create race track panel
         raceTrackPanel = new RaceTrackPanel(race);
         add(raceTrackPanel, BorderLayout.CENTER);
+        
 
         // Create control panel
         JPanel controlPanel = new JPanel();
@@ -87,9 +88,6 @@ public class HorseRacingApp extends JFrame {
         controlPanel.add(new JLabel("Weather:"));
         controlPanel.add(weatherSelector);
 
-       
-
-        
 
         pack();
         setLocationRelativeTo(null);
@@ -104,6 +102,9 @@ public class HorseRacingApp extends JFrame {
         race.addHorse(new Horse('A', "Lightning", 0.7), 1);
         race.addHorse(new Horse('B', "Thunder", 0.6), 2);
         race.addHorse(new Horse('C', "Storm", 0.5), 3);
+        for (Horse horse : race.getHorses().values()) {
+            horse.setImage(new ImageIcon("Horseimg.png")); // Default image
+        }
     }
 
     private void startRace() {

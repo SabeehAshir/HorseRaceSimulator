@@ -92,21 +92,15 @@ public class Horse {
     public void setCoatColor(String coatColor) {
         this.coatColor = coatColor;
     }
-    public void setSymbol(char symbol) {
-        this.symbol = symbol;
-    }
     public String getSaddle() {
         return saddle;
     }
-
     public void setSaddle(String saddle) {
         this.saddle = saddle;
     }
-
     public String getHorseshoes() {
         return horseshoes;
     }
-
     public void setHorseshoes(String horseshoes) {
         this.horseshoes = horseshoes;
     }

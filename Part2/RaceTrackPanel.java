@@ -4,8 +4,6 @@ import java.util.Map;
 
 public class RaceTrackPanel extends JPanel {
     private final Race race;
-    //private final int raceLength;
-    //rivate final Map<Integer,Horse> horses;
     private final Image horseImage;
     private final Image fallenHorseImage;
 
@@ -39,7 +37,9 @@ public class RaceTrackPanel extends JPanel {
         for (Map.Entry<Integer, Horse> entry : horses.entrySet()) { // Iterate over the map entries
             int lane = entry.getKey(); // Get the lane number
             Horse horse = entry.getValue(); // Get the horse in the lane
-            if (horse != null) { // If there is a horse in the lane
+
+            if (horse != null&& horse.getImage() != null) {
+                Image horseImage = horse.getImage().getImage();
                 int x = 20 + horse.getDistanceTravelled() * 30; // Calculate the X position based on distance
                 int y = 40 + (lane - 1) * 60; // Calculate the Y position based on the lane
     
