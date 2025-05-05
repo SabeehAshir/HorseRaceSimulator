@@ -154,7 +154,7 @@ public class HorseCustomization extends JDialog {
     
             dispose(); // Close the customization dialog
         } catch (Exception ex) {
-            ex.printStackTrace(); // Print the stack trace for debugging
+            ex.printStackTrace(); 
             JOptionPane.showMessageDialog(this, "An error occurred while saving customizations: " + ex.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
         }

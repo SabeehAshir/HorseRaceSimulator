@@ -17,6 +17,7 @@ public class Race
     private int numberOfLanes= 0;
     private String trackShape = "oval"; // Default track shape
     private String weatherCondition = "dry"; // Default weather condition
+    private final Map<String, HorseStatistics> statisticsMap = new HashMap<>(); // Map to store horse statistics
 
     /**
      * Constructor for objects of class Race
@@ -179,7 +180,13 @@ public class Race
         if (theHorse == null) { // Skip null horses
             return false;
         }
-        return theHorse.getDistanceTravelled() >= raceLength;
+        if(theHorse.getDistanceTravelled() >= raceLength){
+            theHorse.setPosition(1);
+            return true;
+        } else {
+            return false;
+
+        } 
     }
 
     private void adjustConfidenceForWinner(Horse winner) 
@@ -233,6 +240,22 @@ public class Race
             throw new IllegalArgumentException("Invalid weather condition: " + condition);
         }
         this.weatherCondition = condition;
+    }
+    public void endRace(long startTime, long endTime) {
+        double raceTime = (endTime - startTime) / 1000.0; // Calculate race time in seconds
+        for (Horse horse : horses.values()) {
+            double speed = horse.getDistanceTravelled() /raceTime; // Example calculation
+            boolean won = horse.getPosition() == 1; // Check if the horse won
+            String trackCondition = this.weatherCondition; // Current track condition
+    
+            // Update statistics
+            HorseStatistics stats = statisticsMap.get(horse.getName());
+            if (stats == null) {
+                stats = new HorseStatistics(horse.getName());
+                statisticsMap.put(horse.getName(), stats);
+            }
+            stats.addRace(speed, raceTime, won, trackCondition);
+        }
     }
     
 }

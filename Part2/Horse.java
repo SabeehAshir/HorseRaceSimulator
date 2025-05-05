@@ -11,6 +11,7 @@ public class Horse {
     private String coatColor;
     private String saddle;
     private String horseshoes;
+    private int position;
     public Horse(char symbol, String name, double confidence) {
         if (confidence < 0 || confidence > 1) {
             throw new IllegalArgumentException("Confidence must be between 0 and 1.");
@@ -103,5 +104,11 @@ public class Horse {
     }
     public void setHorseshoes(String horseshoes) {
         this.horseshoes = horseshoes;
+    }
+    public int getPosition() {
+        return position;
+    }
+    public void setPosition(int position) {
+        this.position = position;
     }
 }

@@ -1,11 +1,14 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.Map;
+import java.util.HashMap;
 
 
 public class HorseRacingApp extends JFrame {
     private int trackLength = 15; // Default track length
     private Race race;
     private RaceTrackPanel raceTrackPanel;
+    private HorseStatistics horseStatistics;
 
     public HorseRacingApp() {
         setTitle("Horse Racing Simulation");
@@ -38,6 +41,13 @@ public class HorseRacingApp extends JFrame {
         new HorseCustomization(this, race.getHorses(),raceTrackPanel).setVisible(true); // Pass the entire map of horses
         });
         controlPanel.add(customiseButton);
+
+        Map<String,HorseStatistics> statisticsMap = new HashMap<String,HorseStatistics>();
+        JButton statsButton = new JButton("View Statistics");
+        statsButton.addActionListener(e -> {
+        new StatisticsWindow(statisticsMap).setVisible(true);
+        });
+        controlPanel.add(statsButton);
 
         JSlider laneCountSlider = new JSlider(3, 10, 3); // Min 3 lane, max 10 lanes, default 3
         laneCountSlider.setMajorTickSpacing(1);
