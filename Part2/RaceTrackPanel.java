@@ -3,32 +3,36 @@ import java.awt.*;
 import java.util.Map;
 
 public class RaceTrackPanel extends JPanel {
-    private final int raceLength;
-    private final Map<Integer,Horse> horses;
+    private final Race race;
+    //private final int raceLength;
+    //rivate final Map<Integer,Horse> horses;
     private final Image horseImage;
     private final Image fallenHorseImage;
 
-    public RaceTrackPanel(int raceLength, Map<Integer,Horse> horses) {
-        this.raceLength = raceLength;
-        this.horses = horses;
+    public RaceTrackPanel(Race race) {
+        this.race=race;
 
         // Load horse and fallen horse images
         this.horseImage = Toolkit.getDefaultToolkit().getImage("Horseimg.png");
         this.fallenHorseImage = Toolkit.getDefaultToolkit().getImage("fallen.png"); 
 
-        setPreferredSize(new Dimension(raceLength * 30 + 50, horses.size() * 60 + 40));
+        updatePreferredSize();
         setBackground(Color.LIGHT_GRAY);
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+
+        int trackLength = race.getTrackLength();
+        int numberOfLanes = race.getLaneCount();
+        Map<Integer, Horse> horses = race.getHorses();
     
-        // Draw track lanes
+        // Draw track lanes0
         g.setColor(Color.BLACK);
-        for (int i = 1; i <= horses.size(); i++) { // Dynamically handle the number of lanes
+        for (int i = 1; i <= numberOfLanes; i++) { // Dynamically handle the number of lanes
             int y = 20 + (i - 1) * 60; // Calculate the Y position for each lane
-            g.drawLine(20, y, raceLength * 30 + 20, y); // Draw the lane line
+            g.drawLine(20, y, trackLength * 30 + 20, y); // Draw the lane line
         }
     
         // Draw horses
@@ -55,5 +59,13 @@ public class RaceTrackPanel extends JPanel {
 
     public void updateRace() {
         repaint();
+    }
+    
+    private void updatePreferredSize() {
+        // Dynamically calculate the preferred size based on the race's track length and number of lanes
+        int trackLength = race.getTrackLength();
+        int numberOfLanes = race.getLaneCount();
+        setPreferredSize(new Dimension(trackLength * 30 + 50, numberOfLanes * 60 + 40));
+        revalidate(); // Notify the layout manager of the size change
     }
 }

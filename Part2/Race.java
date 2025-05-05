@@ -12,7 +12,7 @@ import javax.swing.JOptionPane;
  */
 public class Race
 {
-    private final int raceLength;
+    private  int raceLength;
     private final Map<Integer,Horse> horses;
     private int numberOfLanes= 0;
     private String trackShape = "oval"; // Default track shape
@@ -209,6 +209,16 @@ public class Race
         }
     
         numberOfLanes = laneCount;
+    }
+    public void setTrackLength(int length) {
+        if (length <= 0) throw new IllegalArgumentException("Track length must be positive.");
+        this.raceLength = length;
+    }
+    public int getTrackLength() {
+        return this.raceLength;
+    }
+    public int getLaneCount() {
+        return numberOfLanes;
     }
     public void setTrackShape(String shape) {
         if (!shape.equals("oval") && !shape.equals("figure-eight") && !shape.equals("zigzag")) {
