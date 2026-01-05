@@ -42,14 +42,14 @@ java HorseRaceSimulator
 ## Usage Instructions
 ![RaceTrack pannel ](Part2/Trackpanel.png)
 ### Customize Horses:
-![Betiting Window ](Part2/CustomiseHorse.png)
+![Betting Window ](Part2/Customisehorse.png)
 Open the application and click the "Customise Horses" button.
 Modify horse attributes such as breed, coat color, saddle, and symbol.
 Save your changes to apply the customizations.
 
 
 ### Place Bets:
-![Betiting Window ](Part2/betting.png)
+![Betting Window ](Part2/betting.png)
 Click the "Place Bet" button to open the betting window.
 Select a horse and place your bet using the available balance.
 
