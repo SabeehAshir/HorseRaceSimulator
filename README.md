@@ -40,32 +40,32 @@ javac .java
 java HorseRaceSimulator
 ```
 ## Usage Instructions
-![RaceTrack pannel ](part2/Trackpanel.png)
+![RaceTrack pannel ](Part2/Trackpanel.png)
 ### Customize Horses:
-![Betiting Window ](part2/CustomiseHorse.png)
+![Betiting Window ](Part2/CustomiseHorse.png)
 Open the application and click the "Customise Horses" button.
 Modify horse attributes such as breed, coat color, saddle, and symbol.
 Save your changes to apply the customizations.
 
 
 ### Place Bets:
-![Betiting Window ](part2/betting.png)
+![Betiting Window ](Part2/betting.png)
 Click the "Place Bet" button to open the betting window.
 Select a horse and place your bet using the available balance.
 
 
 ### Start the Race:
-![Start Race ](part2/buttons.png)
+![Start Race ](Part2/buttons.png)
 Click the "Start Race" button to begin the race.
 Watch the horses compete on the race track.
 
 ### View Statistics:
-![Statistics window](part2/Stats.png)
+![Statistics window](Part2/Stats.png)
 After the race, click the "View Statistics" button to open the statistics window.
 Analyze horse performance metrics such as average speed, win percentage, and historical race data.
 
 ### Adjust Track Settings:
-![Track Settinfs ](part2/TrackCustomisation.png)
+![Track Settinfs ](Part2/TrackCustomisation.png)
 Use the "Track Shape" dropdown to select the shape of the race track (e.g., oval, figure-eight, zigzag).
 Use the "Weather" dropdown to set the weather conditions (e.g., dry, muddy, icy).
 
